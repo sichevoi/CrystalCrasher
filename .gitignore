@@ -1,0 +1,7 @@
+*.sln
+*.csproj
+*.userprefs
+Library
+Temp
+ProjectSettings
+ios-release/Libraries/libiPhone-lib.a
