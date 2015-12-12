@@ -7,7 +7,7 @@ public class LevelManager : MonoBehaviour {
 	public static string GAME_SCENE_NAME = "Game";
 	public static string WIN_SCENE_NAME = "TheWin";
 	public static string DEATH_SCENE_NAME = "TheDeath";
-	
+
 	public void LoadStartMenu() {
 		Application.LoadLevel(MENU_SCENE_NAME);
 	}

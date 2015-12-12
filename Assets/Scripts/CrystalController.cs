@@ -15,6 +15,32 @@ public class CrystalController : MonoBehaviour {
 	private Type _type = Type.RED;
 	private SpriteRenderer _spriteRenderer;
 
+	private ScoresManager _scoreManager;
+
+	public static Type GetNext(Type type) {
+		switch(type) {
+			case Type.RED:
+				return Type.GREEN;
+			case Type.GREEN:
+				return Type.BLUE;
+			case Type.BLUE:
+			default:
+				return Type.RED;
+		}
+	}
+
+	public static Color GetColor(Type type) {
+		switch(type) {
+		case Type.RED:
+				return Color.red;
+			case Type.GREEN:
+				return Color.green;
+			case Type.BLUE:
+			default:
+				return Color.blue;
+		}
+	}
+
 	// Use this for initialization
 	void Start () {
 		GameObject textRed = transform.Find("TextRed").gameObject;
@@ -60,6 +86,8 @@ public class CrystalController : MonoBehaviour {
 			TextMesh textMesh = activeText.GetComponent<TextMesh> ();
 			textMesh.color = colors[Random.Range(0, colors.Length)];
 		}
+
+		_scoreManager = GetComponentInParent<ScoresManager> ();
 	}
 	
 	public void SetType(Type type) {
@@ -67,9 +95,12 @@ public class CrystalController : MonoBehaviour {
 	}
 
 	public void Hit(Type hitType) {
-//		if (hitType == _type) {
+		if (hitType.Equals(_type)) {
 			enabled = false;
+			_scoreManager.IncrementScore();
 			Destroy(gameObject);
-//		}
+		} else {
+			Debug.Log("Hit with a different type, my type is " + _type + " hit type is " + hitType);
+		}
 	}
 }
