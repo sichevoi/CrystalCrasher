@@ -13,6 +13,8 @@ public class CrystalsSpawner : MonoBehaviour {
 
 	private Transform originTransform;
 
+	private CrystalSetup.Type[] types = new CrystalSetup.Type[] { CrystalSetup.Type.RED, CrystalSetup.Type.BLUE, CrystalSetup.Type.GREEN };
+
 	// Use this for initialization
 	void Start () {
 		ScheduleSpawn();
@@ -41,5 +43,7 @@ public class CrystalsSpawner : MonoBehaviour {
 		newCrystal.transform.position = originTransform.position;
 		Rigidbody2D rigidBody = newCrystal.GetComponent<Rigidbody2D> ();
 		rigidBody.velocity = velocity;
+		CrystalSetup setup = newCrystal.GetComponent<CrystalSetup> ();
+		setup.SetType(types[Random.Range(0, types.Length)]);
 	}
 }
