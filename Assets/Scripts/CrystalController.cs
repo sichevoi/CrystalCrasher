@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CrystalSetup : MonoBehaviour {
+public class CrystalController : MonoBehaviour {
 
 	public enum Type {
 		RED,
@@ -13,6 +13,7 @@ public class CrystalSetup : MonoBehaviour {
 
 	private Color[] colors = new Color[] { Color.red, Color.blue, Color.green };
 	private Type _type = Type.RED;
+	private SpriteRenderer _spriteRenderer;
 
 	// Use this for initialization
 	void Start () {
@@ -48,12 +49,12 @@ public class CrystalSetup : MonoBehaviour {
 				break;	
 		}
 
-		SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer> ();
-		if (spriteRenderer == null) {
+		_spriteRenderer = GetComponent<SpriteRenderer> ();
+		if (_spriteRenderer == null) {
 			gameObject.AddComponent<SpriteRenderer> ();
 		}
 
-		spriteRenderer.sprite = sprites[Random.Range(0, sprites.Length)];
+		_spriteRenderer.sprite = sprites[Random.Range(0, sprites.Length)];
 
 		if (activeText != null) {
 			TextMesh textMesh = activeText.GetComponent<TextMesh> ();
@@ -63,5 +64,12 @@ public class CrystalSetup : MonoBehaviour {
 	
 	public void SetType(Type type) {
 		_type = type;
+	}
+
+	public void Hit(Type hitType) {
+//		if (hitType == _type) {
+			enabled = false;
+			Destroy(gameObject);
+//		}
 	}
 }
