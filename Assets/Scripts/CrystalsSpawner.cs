@@ -11,9 +11,12 @@ public class CrystalsSpawner : MonoBehaviour {
 	private float _elapsedTime;
 	private float _nextSpawnPeriod;
 
+	private Transform originTransform;
+
 	// Use this for initialization
 	void Start () {
 		ScheduleSpawn();
+		originTransform = GameObject.FindGameObjectWithTag("Respawn").transform;
 	}
 	
 	// Update is called once per frame
@@ -35,7 +38,7 @@ public class CrystalsSpawner : MonoBehaviour {
 		GameObject next = crystals[Random.Range(0, crystals.Length)];
 		GameObject newCrystal = Instantiate<GameObject>(next);
 		newCrystal.transform.parent = transform;
-		newCrystal.transform.position = transform.position;
+		newCrystal.transform.position = originTransform.position;
 		Rigidbody2D rigidBody = newCrystal.GetComponent<Rigidbody2D> ();
 		rigidBody.velocity = velocity;
 	}
