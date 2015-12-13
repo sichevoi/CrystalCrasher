@@ -63,10 +63,6 @@ public class LaserScript : MonoBehaviour {
 			yield return null;
 		}
 
-//		if (_audio.isPlaying) {
-//			_audio.Stop();
-//		}
-
 		_line.enabled = false;
 	}
 
