@@ -3,8 +3,6 @@ using System.Collections;
 
 public class LaserScript : MonoBehaviour {
 
-	private float laserLength = 1f;
-
 	private LineRenderer _line;
 	private bool _hit = false;
 	private CrystalController.Type _type;

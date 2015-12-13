@@ -18,11 +18,11 @@ public class CrystalController : MonoBehaviour {
 
 	private Color[] colors = new Color[] { Color.red, Color.blue, Color.green };
 	private Type _type = Type.RED;
-	private SpriteRenderer _spriteRenderer;
-
-	private ScoresManager _scoreManager;
-
 	private Mode _mode = Mode.COLOR;
+
+	private SpriteRenderer _spriteRenderer;
+	private ScoresManager _scoreManager;
+	private CrystalsSpawner _spawner;
 
 	public static Type GetNext(Type type) {
 		switch(type) {
@@ -60,6 +60,7 @@ public class CrystalController : MonoBehaviour {
 		ApplyType(_type);
 
 		_scoreManager = GetComponentInParent<ScoresManager> ();
+		_spawner = GetComponentInParent<CrystalsSpawner> ();
 	}
 	
 	public void SetType(Type type) {
@@ -74,7 +75,7 @@ public class CrystalController : MonoBehaviour {
 		if (hitType.Equals(_type)) {
 			enabled = false;
 			_scoreManager.IncrementScore();
-			Destroy(gameObject);
+			_spawner.ReturnToPool(gameObject);
 		} else {
 			Debug.Log("Hit with a different type, my type is " + _type + " hit type is " + hitType);
 		}
