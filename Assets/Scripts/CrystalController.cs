@@ -9,6 +9,11 @@ public class CrystalController : MonoBehaviour {
 		BLUE
 	}
 
+	public enum Mode {
+		TEXT,
+		COLOR
+	}
+
 	public Sprite[] sprites;
 
 	private Color[] colors = new Color[] { Color.red, Color.blue, Color.green };
@@ -16,6 +21,8 @@ public class CrystalController : MonoBehaviour {
 	private SpriteRenderer _spriteRenderer;
 
 	private ScoresManager _scoreManager;
+
+	private Mode _mode = Mode.COLOR;
 
 	public static Type GetNext(Type type) {
 		switch(type) {
@@ -43,13 +50,56 @@ public class CrystalController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
+
+		_spriteRenderer = GetComponent<SpriteRenderer> ();
+		if (_spriteRenderer == null) {
+			gameObject.AddComponent<SpriteRenderer> ();
+		}
+		_spriteRenderer.sprite = sprites[Random.Range(0, sprites.Length)];
+
+		ApplyType(_type);
+
+		_scoreManager = GetComponentInParent<ScoresManager> ();
+	}
+	
+	public void SetType(Type type) {
+		_type = type;
+	}
+
+	public void SetMode(Mode mode) {
+		_mode = mode;
+	}
+
+	public void Hit(Type hitType) {
+		if (hitType.Equals(_type)) {
+			enabled = false;
+			_scoreManager.IncrementScore();
+			Destroy(gameObject);
+		} else {
+			Debug.Log("Hit with a different type, my type is " + _type + " hit type is " + hitType);
+		}
+	}
+
+	private void ApplyType(Type type) {
 		GameObject textRed = transform.Find("TextRed").gameObject;
 		GameObject textBlue = transform.Find("TextBlue").gameObject;
 		GameObject textGreen = transform.Find("TextGreen").gameObject;
 
+		switch(_mode) {
+			case Mode.TEXT:
+				ApplyTypeModeText(type, textRed, textBlue, textGreen);
+				break;
+			case Mode.COLOR:
+				ApplyTypeModeColor(type, textRed, textBlue, textGreen);
+				break;
+		}
+	}
+
+	private void ApplyTypeModeText(Type type, GameObject textRed, GameObject textBlue, GameObject textGreen) {
 		GameObject activeText = null;
 
-		switch(_type) {
+		switch(type) {
 			case Type.RED:
 				activeText = textRed;
 
@@ -75,32 +125,48 @@ public class CrystalController : MonoBehaviour {
 				break;	
 		}
 
-		_spriteRenderer = GetComponent<SpriteRenderer> ();
-		if (_spriteRenderer == null) {
-			gameObject.AddComponent<SpriteRenderer> ();
-		}
-
-		_spriteRenderer.sprite = sprites[Random.Range(0, sprites.Length)];
-
 		if (activeText != null) {
 			TextMesh textMesh = activeText.GetComponent<TextMesh> ();
 			textMesh.color = colors[Random.Range(0, colors.Length)];
 		}
-
-		_scoreManager = GetComponentInParent<ScoresManager> ();
-	}
-	
-	public void SetType(Type type) {
-		_type = type;
 	}
 
-	public void Hit(Type hitType) {
-		if (hitType.Equals(_type)) {
-			enabled = false;
-			_scoreManager.IncrementScore();
-			Destroy(gameObject);
-		} else {
-			Debug.Log("Hit with a different type, my type is " + _type + " hit type is " + hitType);
+	private void ApplyTypeModeColor(Type type, GameObject textRed, GameObject textBlue, GameObject textGreen) {
+		GameObject activeText = null;
+
+		int rnd = Random.Range(0, 3);
+
+		Debug.Log("Rnd is " + rnd);
+
+		switch(rnd) {
+			case 0:
+				activeText = textRed;
+
+				textRed.SetActive(true);
+				textBlue.SetActive(false);
+				textGreen.SetActive(false);
+
+				break;
+			case 1:
+				activeText = textBlue;
+
+				textRed.SetActive(false);
+				textBlue.SetActive(true);
+				textGreen.SetActive(false);
+
+				break;
+			case 2:
+				activeText = textGreen;
+
+				textRed.SetActive(false);
+				textBlue.SetActive(false);
+				textGreen.SetActive(true);
+				break;	
+		}
+
+		if (activeText != null) {
+			TextMesh textMesh = activeText.GetComponent<TextMesh> ();
+			textMesh.color = CrystalController.GetColor(type);
 		}
 	}
 }
