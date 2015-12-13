@@ -51,7 +51,6 @@ public class CrystalController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-
 		_spriteRenderer = GetComponent<SpriteRenderer> ();
 		if (_spriteRenderer == null) {
 			gameObject.AddComponent<SpriteRenderer> ();
@@ -134,11 +133,7 @@ public class CrystalController : MonoBehaviour {
 	private void ApplyTypeModeColor(Type type, GameObject textRed, GameObject textBlue, GameObject textGreen) {
 		GameObject activeText = null;
 
-		int rnd = Random.Range(0, 3);
-
-		Debug.Log("Rnd is " + rnd);
-
-		switch(rnd) {
+		switch(Random.Range(0, 3)) {
 			case 0:
 				activeText = textRed;
 

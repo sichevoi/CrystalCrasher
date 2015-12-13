@@ -12,3 +12,7 @@
 /Users/elvirity/Workspace/UnityProjects/CrystalCrasher/Temp/bin/Debug/Unity.CecilTools.dll
 /Users/elvirity/Workspace/UnityProjects/CrystalCrasher/Temp/bin/Debug/Mono.Cecil.Pdb.dll
 /Users/elvirity/Workspace/UnityProjects/CrystalCrasher/Temp/bin/Debug/Mono.Cecil.Mdb.dll
+/Users/elvirity/Workspace/UnityProjects/CrystalCrasher/Temp/bin/Debug/Assembly-CSharp.dll.mdb
+/Users/elvirity/Workspace/UnityProjects/CrystalCrasher/Temp/bin/Debug/Assembly-CSharp.dll
+/Users/elvirity/Workspace/UnityProjects/CrystalCrasher/obj/Debug/Assembly-CSharp.dll
+/Users/elvirity/Workspace/UnityProjects/CrystalCrasher/obj/Debug/Assembly-CSharp.dll.mdb

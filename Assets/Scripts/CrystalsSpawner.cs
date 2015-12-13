@@ -15,6 +15,8 @@ public class CrystalsSpawner : MonoBehaviour {
 
 	private CrystalController.Type[] types = new CrystalController.Type[] { CrystalController.Type.RED, CrystalController.Type.BLUE, CrystalController.Type.GREEN };
 
+	private bool _isRunning = true;
+
 	// Use this for initialization
 	void Start () {
 		ScheduleSpawn();
@@ -23,11 +25,30 @@ public class CrystalsSpawner : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+
+		if (_isRunning == false) {
+			return;
+		}
+
 		if (_elapsedTime > _nextSpawnPeriod) {
 			SpawnCrystal();
 			ScheduleSpawn();
 		} else {
 			_elapsedTime += Time.fixedDeltaTime;
+		}
+	}
+
+	public void SpawnPause() {
+		if (_isRunning) {
+			_isRunning = false;
+			_elapsedTime = 0;
+		}
+	}
+
+	public void SpawnResume() {
+		if (_isRunning == false) {
+			_isRunning = true;
+			ScheduleSpawn();
 		}
 	}
 
