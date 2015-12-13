@@ -4,9 +4,9 @@ using UnityEngine.UI;
 
 public class PlayerAtack : MonoBehaviour {
 
-	public GameObject projectileRed;
-	public GameObject projectileGreen;
-	public GameObject projectileBlue;
+	public Sprite playerRed;
+	public Sprite playerGreen;
+	public Sprite playerBlue;
 
 	private LaserScript _laser;
 	private Image _colorImage;
