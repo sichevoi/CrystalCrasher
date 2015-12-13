@@ -3,25 +3,43 @@ using System.Collections;
 
 public class LaserScript : MonoBehaviour {
 
+	public Color redLaser = Color.red;
+	public Color greenLaser = Color.green;
+	public Color blueLaser = Color.blue;
+
+	private static string COLOR_PROPERTY_NAME = "_Color";
+
 	private LineRenderer _line;
+	private Material _mat;
 	private bool _hit = false;
 	private CrystalController.Type _type;
+
+	private bool _setColor = false;
 
 	void Start () {
 		_line = GetComponent<LineRenderer> ();
 		_line.enabled = false;
+
+		_mat = _line.material;
+		_mat.SetColor(COLOR_PROPERTY_NAME, redLaser);
 	}
 	
 	void Update () {
 		if (Input.GetButtonDown("Fire1")) {
+			CheckColor();
+
 			StopCoroutine("FireLaser");
+
 			_hit = false;
 			StartCoroutine("FireLaser");
 		}
 	}
 
 	public void SetGunType(CrystalController.Type type) {
-		_type = type;
+		if (_type != type) {
+			_type = type;
+			_setColor = true;
+		}
 	}
 
 	public CrystalController.Type GetGunType() {
@@ -58,5 +76,25 @@ public class LaserScript : MonoBehaviour {
 		}
 
 		return ray;
+	}
+
+	private void CheckColor() {
+		if (_setColor) {
+			Color current = _mat.GetColor(COLOR_PROPERTY_NAME);
+			Color newColor = redLaser;
+
+			switch(_type) {
+				case CrystalController.Type.GREEN:
+					newColor = greenLaser;
+					break;
+				case CrystalController.Type.BLUE:
+					newColor = blueLaser;
+					break;
+			}
+
+			if (current != newColor) {
+				_mat.SetColor(COLOR_PROPERTY_NAME, newColor);
+			}
+		}
 	}
 }
