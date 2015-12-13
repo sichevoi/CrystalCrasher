@@ -18,7 +18,7 @@ public class CrystalController : MonoBehaviour {
 
 	private Color[] colors = new Color[] { Color.red, Color.blue, Color.green };
 	private Type _type = Type.RED;
-	private Mode _mode = Mode.COLOR;
+	private Mode _mode = Mode.TEXT;
 
 	private SpriteRenderer _spriteRenderer;
 	private ScoresManager _scoreManager;
