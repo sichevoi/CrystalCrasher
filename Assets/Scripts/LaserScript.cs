@@ -7,7 +7,7 @@ public class LaserScript : MonoBehaviour {
 	public Color greenLaser = Color.green;
 	public Color blueLaser = Color.blue;
 
-	private static string COLOR_PROPERTY_NAME = "_Color";
+	private static string COLOR_PROPERTY_NAME = "_TintColor";
 
 	private LineRenderer _line;
 	private Material _mat;
