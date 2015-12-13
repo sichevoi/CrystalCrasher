@@ -28,6 +28,7 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	public void LoadDeath() {
+		Debug.Log("Need to load death");
 		Application.LoadLevel(DEATH_SCENE_NAME);
 	}
 	

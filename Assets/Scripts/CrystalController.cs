@@ -78,6 +78,7 @@ public class CrystalController : MonoBehaviour {
 			_spawner.ReturnToPool(gameObject);
 		} else {
 			Debug.Log("Hit with a different type, my type is " + _type + " hit type is " + hitType);
+			_spawner.OnMisHit(gameObject);
 		}
 	}
 

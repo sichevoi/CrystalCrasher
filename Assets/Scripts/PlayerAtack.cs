@@ -11,10 +11,13 @@ public class PlayerAtack : MonoBehaviour {
 	private LaserScript _laser;
 	private SpriteRenderer _body;
 
+	private LevelManager _levelManager;
+
 	// Use this for initialization
 	void Start () {
 		_laser = transform.FindChild("Gun/GunTip").GetComponent<LaserScript> ();
 		_body = transform.FindChild("Gun/Body").GetComponent<SpriteRenderer> ();
+		_levelManager = FindObjectOfType<LevelManager> ();
 	}
 	
 	// Update is called once per frame
@@ -22,6 +25,13 @@ public class PlayerAtack : MonoBehaviour {
 		if (Input.GetButtonDown("Jump")) {
 			CrystalController.Type nextType = CrystalController.GetNext(_laser.GetGunType());
 			UpdateType(nextType);
+		}
+	}
+
+	void OnTriggerEnter2D(Collider2D other) {
+		Debug.Log("Triggered player collision");
+		if (other.gameObject.GetComponent<CrystalController> () != null) {
+			_levelManager.LoadDeath();
 		}
 	}
 

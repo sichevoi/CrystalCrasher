@@ -12,7 +12,8 @@ public class CrystalsSpawner : MonoBehaviour {
 	private float _elapsedTime;
 	private float _nextSpawnPeriod;
 
-	private Transform originTransform;
+	private Transform _originTransform;
+	private LevelManager _levelManager;
 
 	private CrystalController.Type[] types = new CrystalController.Type[] { CrystalController.Type.RED, CrystalController.Type.BLUE, CrystalController.Type.GREEN };
 
@@ -25,7 +26,8 @@ public class CrystalsSpawner : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		ScheduleSpawn();
-		originTransform = GameObject.FindGameObjectWithTag("Respawn").transform;
+		_originTransform = GameObject.FindGameObjectWithTag("Respawn").transform;
+		_levelManager = FindObjectOfType<LevelManager> ();
 	}
 	
 	// Update is called once per frame
@@ -59,6 +61,10 @@ public class CrystalsSpawner : MonoBehaviour {
 	public void ReturnToPool(GameObject crystal) {
 		crystal.SetActive(false);
 		objectsPool.Add(crystal);
+	}
+
+	public void OnMisHit(GameObject gameObject) {
+		_levelManager.LoadDeath();
 	}
 
 	private GameObject TryGetFromPool() {
@@ -100,7 +106,7 @@ public class CrystalsSpawner : MonoBehaviour {
 			newCrystal.SetActive(true);
 		}
 
-		newCrystal.transform.position = originTransform.position;
+		newCrystal.transform.position = _originTransform.position;
 
 		Rigidbody2D rigidBody = newCrystal.GetComponent<Rigidbody2D> ();
 		rigidBody.velocity = velocity;
