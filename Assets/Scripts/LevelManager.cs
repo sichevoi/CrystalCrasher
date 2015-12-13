@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class LevelManager : MonoBehaviour {
@@ -13,16 +14,20 @@ public class LevelManager : MonoBehaviour {
 	
 	public void LoadStartLevel() {
 		Toolbox.Instance.currentLevel = 0;
-		Application.LoadLevel(GAME_SCENE_NAME);
+		SceneManager.LoadScene(GAME_SCENE_NAME);
 	}
-	
+
+	public void LoadDeathWithDelay(long delay) {
+		Invoke("LoadDeath", delay);
+	}
+
 	public void LoadDeath() {
 		Debug.Log("Need to load death");
-		Application.LoadLevel(DEATH_SCENE_NAME);
+		SceneManager.LoadScene(DEATH_SCENE_NAME);
 	}
 	
 	public void RestartLevel() {
-		Application.LoadLevel(GAME_SCENE_NAME);
+		SceneManager.LoadScene(GAME_SCENE_NAME);
 	}
 	
 	public void QuitRequest(string name) {

@@ -15,6 +15,10 @@ public class CrystalsSpawner : MonoBehaviour {
 	private Transform _originTransform;
 	private LevelManager _levelManager;
 
+	private GameObject _securityLaser;
+	private AudioSource _backgroundMusic;
+	private AudioSource _sirene;
+
 	private CrystalController.Type[] types = new CrystalController.Type[] { CrystalController.Type.RED, CrystalController.Type.BLUE, CrystalController.Type.GREEN };
 
 	private bool _isRunning = true;
@@ -28,6 +32,11 @@ public class CrystalsSpawner : MonoBehaviour {
 		ScheduleSpawn();
 		_originTransform = GameObject.FindGameObjectWithTag("Respawn").transform;
 		_levelManager = FindObjectOfType<LevelManager> ();
+
+		_securityLaser = transform.FindChild("SecurityLaser").gameObject;
+		_securityLaser.SetActive(false);
+		_sirene = GetComponent<AudioSource> ();
+		_backgroundMusic = GameObject.FindGameObjectWithTag("BackgroundMusic").GetComponent<AudioSource> ();
 	}
 	
 	// Update is called once per frame
@@ -64,7 +73,11 @@ public class CrystalsSpawner : MonoBehaviour {
 	}
 
 	public void OnMisHit(GameObject gameObject) {
-		_levelManager.LoadDeath();
+		_securityLaser.transform.position = transform.position;
+		_securityLaser.SetActive(true);
+		_sirene.Play();
+		_backgroundMusic.Stop();
+		_levelManager.LoadDeathWithDelay(5);
 	}
 
 	private GameObject TryGetFromPool() {
