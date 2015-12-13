@@ -11,6 +11,8 @@ public class LaserScript : MonoBehaviour {
 
 	private LineRenderer _line;
 	private Material _mat;
+	private AudioSource _audio;
+
 	private bool _hit = false;
 	private CrystalController.Type _type;
 
@@ -22,14 +24,21 @@ public class LaserScript : MonoBehaviour {
 
 		_mat = _line.material;
 		_mat.SetColor(COLOR_PROPERTY_NAME, redLaser);
+
+		_audio = GetComponent<AudioSource> ();
 	}
-	
+
 	void Update () {
 		if (Input.GetButtonDown("Fire1")) {
 			CheckColor();
 
 			StopCoroutine("FireLaser");
 
+			if (_audio.isPlaying) {
+				_audio.Stop();
+			}
+
+			_audio.Play();
 			_hit = false;
 			StartCoroutine("FireLaser");
 		}
