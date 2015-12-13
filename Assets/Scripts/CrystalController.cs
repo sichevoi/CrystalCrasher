@@ -15,6 +15,7 @@ public class CrystalController : MonoBehaviour {
 	}
 
 	public Sprite[] sprites;
+	public Transform gun;
 
 	private Color[] colors = new Color[] { Color.red, Color.blue, Color.green };
 	private Type _type = Type.RED;
@@ -23,6 +24,8 @@ public class CrystalController : MonoBehaviour {
 	private SpriteRenderer _spriteRenderer;
 	private ScoresManager _scoreManager;
 	private CrystalsSpawner _spawner;
+	private Collider2D _collider;
+	private Rigidbody2D _rigidBody;
 
 	public static Type GetNext(Type type) {
 		switch(type) {
@@ -61,6 +64,8 @@ public class CrystalController : MonoBehaviour {
 
 		_scoreManager = GetComponentInParent<ScoresManager> ();
 		_spawner = GetComponentInParent<CrystalsSpawner> ();
+		_collider = GetComponent<PolygonCollider2D> ();
+		_rigidBody = GetComponent<Rigidbody2D> ();
 	}
 	
 	public void SetType(Type type) {
@@ -71,16 +76,55 @@ public class CrystalController : MonoBehaviour {
 		_mode = mode;
 	}
 
+	public void Reset() {
+		_collider.enabled = true;
+		StopCoroutine("SmoothMovement");
+		transform.localScale = Vector3.one;
+	}
+
 	public void Hit(Type hitType) {
 		if (hitType.Equals(_type)) {
-			enabled = false;
+			StartCoroutine (SmoothMovement (gun.position));
+			_collider.enabled = false;
 			_scoreManager.IncrementScore();
-			_spawner.ReturnToPool(gameObject);
 		} else {
 			Debug.Log("Hit with a different type, my type is " + _type + " hit type is " + hitType);
 			_spawner.OnMisHit(gameObject);
 		}
 	}
+
+	//Co-routine for moving units from one space to next, takes a parameter end to specify where to move to.
+    protected IEnumerator SmoothMovement (Vector3 end)
+    {
+        //Calculate the remaining distance to move based on the square magnitude of the difference between current position and end parameter. 
+        //Square magnitude is used instead of magnitude because it's computationally cheaper.
+        float remainingDistance = (transform.position - end).x;
+        float moveTime = 0.02f;
+        float inverseMoveTime = 1 / moveTime;
+
+        //While that distance is greater than a very small amount (Epsilon, almost zero):
+        while(remainingDistance > float.Epsilon)
+        {
+            //Find a new position proportionally closer to the end, based on the moveTime
+            Vector3 newPostion = Vector3.MoveTowards(_rigidBody.position, end, inverseMoveTime * Time.deltaTime);
+			float targetDiff = Time.deltaTime * 5;
+			float currentScale = transform.localScale.x;
+			float scaleDiff = targetDiff < currentScale ? targetDiff : currentScale;
+			Vector3 newScale = new Vector3(scaleDiff, scaleDiff, 1);
+            
+            //Call MovePosition on attached Rigidbody2D and move it to the calculated position.
+			transform.localScale -= newScale;
+            _rigidBody.MovePosition (newPostion);
+
+            //Recalculate the remaining distance after moving.
+			remainingDistance = (transform.position - end).x;
+            
+            //Return and loop until sqrRemainingDistance is close enough to zero to end the function
+            yield return null;
+        }
+
+		_spawner.ReturnToPool(gameObject);
+    }
 
 	private void ApplyType(Type type) {
 		GameObject textRed = transform.Find("TextRed").gameObject;

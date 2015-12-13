@@ -104,6 +104,8 @@ public class CrystalsSpawner : MonoBehaviour {
 			crystalController.SetType(types[Random.Range(0, types.Length)]);
 		} else {
 			newCrystal.SetActive(true);
+			CrystalController crystalController = newCrystal.GetComponent<CrystalController> ();
+			crystalController.Reset();
 		}
 
 		newCrystal.transform.position = _originTransform.position;

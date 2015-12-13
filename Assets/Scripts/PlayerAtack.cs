@@ -29,7 +29,6 @@ public class PlayerAtack : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
-		Debug.Log("Triggered player collision");
 		if (other.gameObject.GetComponent<CrystalController> () != null) {
 			_levelManager.LoadDeath();
 		}

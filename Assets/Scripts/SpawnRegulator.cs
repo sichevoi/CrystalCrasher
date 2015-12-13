@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class SpawRegulator : MonoBehaviour {
+public class SpawnRegulator : MonoBehaviour {
 
 	private HashSet<Collider2D> _collided = new HashSet<Collider2D> ();
 	private CrystalsSpawner _spawner;
