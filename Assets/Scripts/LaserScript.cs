@@ -7,9 +7,6 @@ public class LaserScript : LaserBase {
 	public Color greenLaser = Color.green;
 	public Color blueLaser = Color.blue;
 
-	private static string COLOR_PROPERTY_NAME = "_TintColor";
-
-	private Material _mat;
 	private AudioSource _audio;
 
 	private CrystalController.Type _type;
@@ -21,8 +18,7 @@ public class LaserScript : LaserBase {
 	protected override void Start () {
 		base.Start();
 
-		_mat = _line.material;
-		_mat.SetColor(COLOR_PROPERTY_NAME, redLaser);
+		SetLaserColor(redLaser);
 
 		_audio = GetComponent<AudioSource> ();
 	}
@@ -68,7 +64,6 @@ public class LaserScript : LaserBase {
 
 	private void CheckColor() {
 		if (_setColor) {
-			Color current = _mat.GetColor(COLOR_PROPERTY_NAME);
 			Color newColor = redLaser;
 
 			switch(_type) {
@@ -80,9 +75,7 @@ public class LaserScript : LaserBase {
 					break;
 			}
 
-			if (current != newColor) {
-				_mat.SetColor(COLOR_PROPERTY_NAME, newColor);
-			}
+			SetLaserColor(newColor);
 		}
 	}
 }

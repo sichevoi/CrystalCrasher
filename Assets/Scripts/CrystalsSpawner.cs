@@ -17,6 +17,7 @@ public class CrystalsSpawner : MonoBehaviour {
 
 	private AudioSource _backgroundMusic;
 	private AudioSource _sirene;
+	private Transform _secutiry;
 
 	private CrystalController.Type[] types = new CrystalController.Type[] { CrystalController.Type.RED, CrystalController.Type.BLUE, CrystalController.Type.GREEN };
 
@@ -35,6 +36,8 @@ public class CrystalsSpawner : MonoBehaviour {
 
 		_sirene = GetComponent<AudioSource> ();
 		_backgroundMusic = GameObject.FindGameObjectWithTag("BackgroundMusic").GetComponent<AudioSource> ();
+
+		_secutiry = transform.FindChild("Security");
 	}
 	
 	// Update is called once per frame
@@ -74,7 +77,13 @@ public class CrystalsSpawner : MonoBehaviour {
 		_sirene.Play();
 		_backgroundMusic.Stop();
 		_gameOver = true;
-		_levelManager.LoadDeathWithDelay(7);
+
+		foreach (LaserSecurity laserSecurity in _secutiry.GetComponentsInChildren<LaserSecurity> ()) {
+			laserSecurity.SetLaserColor(CrystalController.GetColor(type));
+			laserSecurity.SecurityEnable(true);
+		}
+
+		_levelManager.LoadDeathWithDelay(5);
 	}
 
 	private GameObject TryGetFromPool() {
