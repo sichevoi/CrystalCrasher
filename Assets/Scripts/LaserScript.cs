@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LaserScript : MonoBehaviour {
+public class LaserScript : LaserBase {
 
 	public Color redLaser = Color.red;
 	public Color greenLaser = Color.green;
@@ -9,18 +9,17 @@ public class LaserScript : MonoBehaviour {
 
 	private static string COLOR_PROPERTY_NAME = "_TintColor";
 
-	private LineRenderer _line;
 	private Material _mat;
 	private AudioSource _audio;
 
-	private bool _hit = false;
 	private CrystalController.Type _type;
+
+	protected bool _hit = false;
 
 	private bool _setColor = false;
 
-	void Start () {
-		_line = GetComponent<LineRenderer> ();
-		_line.enabled = false;
+	protected override void Start () {
+		base.Start();
 
 		_mat = _line.material;
 		_mat.SetColor(COLOR_PROPERTY_NAME, redLaser);
@@ -32,15 +31,14 @@ public class LaserScript : MonoBehaviour {
 		if (Input.GetButtonDown("Fire1")) {
 			CheckColor();
 
-			StopCoroutine("FireLaser");
-
 			if (_audio.isPlaying) {
 				_audio.Stop();
 			}
 
 			_audio.Play();
 			_hit = false;
-			StartCoroutine("FireLaser");
+
+			StartFire();
 		}
 	}
 
@@ -55,36 +53,17 @@ public class LaserScript : MonoBehaviour {
 		return _type;
 	}
 
-	IEnumerator FireLaser() {
-		_line.enabled = true;
-
-		while(Input.GetButton("Fire1") && _hit == false) {
-			FireOnce();
-			yield return null;
+	protected override void OnHit(Collider2D collider) {
+		GameObject go = collider.gameObject;
+		CrystalController cc = go != null ? go.GetComponent<CrystalController> () : null;
+		if (cc != null) {
+			cc.Hit(_type);
+			_hit = true;
 		}
-
-		_line.enabled = false;
 	}
 
-	private Ray2D FireOnce() {
-		Ray2D ray = new Ray2D(transform.position, transform.forward);
-		_line.SetPosition(0, ray.origin);
-
-		RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.forward);
-		if (hit != null && hit.collider != null) {
-			_line.SetPosition(1, hit.point);
-
-			GameObject go = hit.collider.gameObject;
-			CrystalController cc = go != null ? go.GetComponent<CrystalController> () : null;
-			if (cc != null) {
-				cc.Hit(_type);
-				_hit = true;
-			}
-		} else {
-			_line.SetPosition(1, ray.GetPoint(100));
-		}
-
-		return ray;
+	protected override bool ShouldFire() {
+		return Input.GetButton("Fire1") && _hit == false;
 	}
 
 	private void CheckColor() {
