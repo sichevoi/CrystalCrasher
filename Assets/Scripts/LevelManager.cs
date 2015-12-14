@@ -13,7 +13,6 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	public void LoadStartLevel() {
-		Toolbox.Instance.currentLevel = 0;
 		SceneManager.LoadScene(GAME_SCENE_NAME);
 	}
 

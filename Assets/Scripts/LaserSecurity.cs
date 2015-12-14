@@ -35,7 +35,6 @@ public class LaserSecurity : LaserBase {
 	}
 
 	protected override void OnHit (Collider2D collider) {
-		Debug.Log("Hit object " + collider.gameObject);
 	}
 
 	protected override Vector3 GetLaserDirection () {

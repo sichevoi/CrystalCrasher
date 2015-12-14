@@ -22,7 +22,7 @@ public class CrystalController : MonoBehaviour {
 	private Mode _mode = Mode.TEXT;
 
 	private SpriteRenderer _spriteRenderer;
-	private ScoresManager _scoreManager;
+	private GameController _gameController;
 	private CrystalsSpawner _spawner;
 	private Collider2D _collider;
 	private Rigidbody2D _rigidBody;
@@ -62,14 +62,18 @@ public class CrystalController : MonoBehaviour {
 
 		ApplyType(_type);
 
-		_scoreManager = GetComponentInParent<ScoresManager> ();
+		_gameController = FindObjectOfType<GameController> ();
 		_spawner = GetComponentInParent<CrystalsSpawner> ();
 		_collider = GetComponent<PolygonCollider2D> ();
 		_rigidBody = GetComponent<Rigidbody2D> ();
 	}
 	
-	public void SetType(Type type) {
+	public void SetCrystalType(Type type) {
 		_type = type;
+	}
+
+	public Type GetCrystalType() {
+		return _type;
 	}
 
 	public void SetMode(Mode mode) {
@@ -86,7 +90,7 @@ public class CrystalController : MonoBehaviour {
 		if (hitType.Equals(_type)) {
 			StartCoroutine (SmoothMovement (gun.position));
 			_collider.enabled = false;
-			_scoreManager.IncrementScore();
+			_gameController.IncrementScore();
 		} else {
 			Debug.Log("Hit with a different type, my type is " + _type + " hit type is " + hitType);
 			_spawner.OnMisHit(gameObject, _type);

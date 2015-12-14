@@ -13,11 +13,8 @@ public class CrystalsSpawner : MonoBehaviour {
 	private float _nextSpawnPeriod;
 
 	private Transform _originTransform;
-	private LevelManager _levelManager;
 
-	private AudioSource _backgroundMusic;
-	private AudioSource _sirene;
-	private Transform _secutiry;
+	private GameController _gameController;
 
 	private CrystalController.Type[] types = new CrystalController.Type[] { CrystalController.Type.RED, CrystalController.Type.BLUE, CrystalController.Type.GREEN };
 
@@ -32,12 +29,8 @@ public class CrystalsSpawner : MonoBehaviour {
 	void Start () {
 		ScheduleSpawn();
 		_originTransform = GameObject.FindGameObjectWithTag("Respawn").transform;
-		_levelManager = FindObjectOfType<LevelManager> ();
 
-		_sirene = GetComponent<AudioSource> ();
-		_backgroundMusic = GameObject.FindGameObjectWithTag("BackgroundMusic").GetComponent<AudioSource> ();
-
-		_secutiry = transform.FindChild("Security");
+		_gameController = FindObjectOfType<GameController> ();
 	}
 	
 	// Update is called once per frame
@@ -74,16 +67,8 @@ public class CrystalsSpawner : MonoBehaviour {
 	}
 
 	public void OnMisHit(GameObject gameObject, CrystalController.Type type) {
-		_sirene.Play();
-		_backgroundMusic.Stop();
 		_gameOver = true;
-
-		foreach (LaserSecurity laserSecurity in _secutiry.GetComponentsInChildren<LaserSecurity> ()) {
-			laserSecurity.SetLaserColor(CrystalController.GetColor(type));
-			laserSecurity.SecurityEnable(true);
-		}
-
-		_levelManager.LoadDeathWithDelay(5);
+		_gameController.OnPlayerDeath(type);
 	}
 
 	private GameObject TryGetFromPool() {
@@ -120,7 +105,7 @@ public class CrystalsSpawner : MonoBehaviour {
 			newCrystal.transform.SetParent(transform);
 
 			CrystalController crystalController = newCrystal.GetComponent<CrystalController> ();
-			crystalController.SetType(types[Random.Range(0, types.Length)]);
+			crystalController.SetCrystalType(types[Random.Range(0, types.Length)]);
 		} else {
 			newCrystal.SetActive(true);
 			CrystalController crystalController = newCrystal.GetComponent<CrystalController> ();
