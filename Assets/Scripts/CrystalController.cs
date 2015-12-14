@@ -27,6 +27,8 @@ public class CrystalController : MonoBehaviour {
 	private Collider2D _collider;
 	private Rigidbody2D _rigidBody;
 
+	private Vector3 _originalScale;
+
 	public static Type GetNext(Type type) {
 		switch(type) {
 			case Type.RED:
@@ -66,6 +68,8 @@ public class CrystalController : MonoBehaviour {
 		_spawner = GetComponentInParent<CrystalsSpawner> ();
 		_collider = GetComponent<PolygonCollider2D> ();
 		_rigidBody = GetComponent<Rigidbody2D> ();
+
+		_originalScale = transform.localScale;
 	}
 	
 	public void SetCrystalType(Type type) {
@@ -83,7 +87,7 @@ public class CrystalController : MonoBehaviour {
 	public void Reset() {
 		_collider.enabled = true;
 		StopCoroutine("SmoothMovement");
-		transform.localScale = Vector3.one;
+		transform.localScale = _originalScale;
 	}
 
 	public void Hit(Type hitType) {
