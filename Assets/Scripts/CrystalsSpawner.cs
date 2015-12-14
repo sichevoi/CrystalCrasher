@@ -26,10 +26,10 @@ public class CrystalsSpawner : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		ScheduleSpawn();
+		_gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController> ();
 		_originTransform = GameObject.FindGameObjectWithTag("Respawn").transform;
 
-		_gameController = FindObjectOfType<GameController> ();
+		ScheduleSpawn();
 	}
 	
 	// Update is called once per frame
@@ -90,8 +90,18 @@ public class CrystalsSpawner : MonoBehaviour {
 	}
 
 	private void ScheduleSpawn() {
-		_nextSpawnPeriod = Random.Range(spawnPeriodMin, spawnPeriodMax);
+		_nextSpawnPeriod = Random.Range(GetSpawnPeriodMin(), GetSpawnPeriodMax());
 		_elapsedTime = 0f;
+	}
+
+	private float GetSpawnPeriodMin() {
+		float period = spawnPeriodMin * _gameController.GetDifficultyModifier();
+		Debug.Log("Spawn period is " + period);
+		return period;
+	}
+
+	private float GetSpawnPeriodMax() {
+		return spawnPeriodMax * _gameController.GetDifficultyModifier();
 	}
 
 	private void SpawnCrystal() {

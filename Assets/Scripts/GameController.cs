@@ -18,8 +18,11 @@ public class GameController : MonoBehaviour {
 	private LevelManager _levelManager;
 
 	private static int GAME_RESTART_TIMEOUT = 3;
+	private static float DIFFICULTY_FACTOR = 0.8f;
 
 	private bool _gameOver = false;
+
+	private float _difficiltyModifier = 1;
 
 	void Start () {
 		_scoreText = FindObjectOfType<Text> ();
@@ -53,6 +56,15 @@ public class GameController : MonoBehaviour {
 		_score += 1;
 		_scoreText.text = _score.ToString();
 
+		if (_score > 0 && _score % 10 == 0) {
+			long numberOfTens = _score / 10;
+			float difficulty = 1f;
+			for (int i = 0; i < numberOfTens; ++i) {
+				difficulty *= DIFFICULTY_FACTOR;
+			}
+			_difficiltyModifier = difficulty;
+		}
+
 		Toolbox.Instance.currentScore = _score;
 	}
 
@@ -66,6 +78,10 @@ public class GameController : MonoBehaviour {
 		_lasersRenderer.enabled = true;
 
 		_levelManager.LoadDeathWithDelay(GAME_RESTART_TIMEOUT);
+	}
+
+	public float GetDifficultyModifier() {
+		return _difficiltyModifier;
 	}
 
 	private Sprite GetLasersSprite(CrystalController.Type type) {
