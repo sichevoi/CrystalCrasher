@@ -17,6 +17,8 @@ public class GameController : MonoBehaviour {
 
 	private LevelManager _levelManager;
 
+	private static int GAME_RESTART_TIMEOUT = 3;
+
 	void Start () {
 		_scoreText = FindObjectOfType<Text> ();
 		_scoreText.text = "0";
@@ -47,7 +49,7 @@ public class GameController : MonoBehaviour {
 		_lasersRenderer.sprite = GetLasersSprite(type);
 		_lasersRenderer.enabled = true;
 
-		_levelManager.LoadDeathWithDelay(5);
+		_levelManager.LoadDeathWithDelay(GAME_RESTART_TIMEOUT);
 	}
 
 	private Sprite GetLasersSprite(CrystalController.Type type) {
