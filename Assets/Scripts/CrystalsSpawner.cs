@@ -103,13 +103,17 @@ public class CrystalsSpawner : MonoBehaviour {
 			GameObject next = crystals[Random.Range(0, crystals.Length)];
 			newCrystal = Instantiate<GameObject>(next);
 			newCrystal.transform.SetParent(transform);
+
+			CrystalController crystalController = newCrystal.GetComponent<CrystalController> ();
+			crystalController.SetCrystalType(types[Random.Range(0, types.Length)]);
 		} else {
 			newCrystal.SetActive(true);
+
+			CrystalController crystalController = newCrystal.GetComponent<CrystalController> ();
+			crystalController.SetCrystalType(types[Random.Range(0, types.Length)]);
+			crystalController.Reset();
 		}
 
-		CrystalController crystalController = newCrystal.GetComponent<CrystalController> ();
-		crystalController.SetCrystalType(types[Random.Range(0, types.Length)]);
-		crystalController.Reset();
 
 		newCrystal.transform.position = _originTransform.position;
 

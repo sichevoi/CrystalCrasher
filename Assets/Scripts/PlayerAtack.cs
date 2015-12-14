@@ -10,6 +10,7 @@ public class PlayerAtack : MonoBehaviour {
 
 	private LaserScript _laser;
 	private SpriteRenderer _body;
+	private AudioSource _gunChangeSound;
 
 	private GameController _gameController;
 
@@ -18,6 +19,7 @@ public class PlayerAtack : MonoBehaviour {
 		_laser = transform.FindChild("Gun/GunTip").GetComponent<LaserScript> ();
 		_body = transform.FindChild("Gun/Body").GetComponent<SpriteRenderer> ();
 		_gameController = FindObjectOfType<GameController> ();
+		_gunChangeSound = transform.FindChild("Gun/ChangeSound").GetComponent<AudioSource> ();
 	}
 	
 	// Update is called once per frame
@@ -38,6 +40,7 @@ public class PlayerAtack : MonoBehaviour {
 	private void UpdateType(CrystalController.Type type) {
 		_laser.SetGunType(type);
 		_body.sprite = GetSpriteForType(type);
+		_gunChangeSound.Play();
 	}
 
 	private Sprite GetSpriteForType(CrystalController.Type type) {

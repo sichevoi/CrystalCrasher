@@ -29,6 +29,8 @@ public class CrystalController : MonoBehaviour {
 
 	private Vector3 _originalScale;
 
+	private bool _initialized = false;
+
 	public static Type GetNext(Type type) {
 		switch(type) {
 			case Type.RED:
@@ -70,9 +72,14 @@ public class CrystalController : MonoBehaviour {
 		_rigidBody = GetComponent<Rigidbody2D> ();
 
 		_originalScale = transform.localScale;
+
+		_initialized = true;
 	}
 	
 	public void SetCrystalType(Type type) {
+		if (_initialized && type != _type) {
+			ApplyType(type);
+		}
 		_type = type;
 	}
 
