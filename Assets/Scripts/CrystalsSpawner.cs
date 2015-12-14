@@ -108,17 +108,17 @@ public class CrystalsSpawner : MonoBehaviour {
 		GameObject newCrystal = TryGetFromPool();
 
 		if (newCrystal == null) {
-			GameObject next = crystals[Random.Range(0, crystals.Length)];
+			GameObject next = crystals[GetIntRandom(3)];
 			newCrystal = Instantiate<GameObject>(next);
 			newCrystal.transform.SetParent(transform);
 
 			CrystalController crystalController = newCrystal.GetComponent<CrystalController> ();
-			crystalController.SetCrystalType(types[Random.Range(0, types.Length)]);
+			crystalController.SetCrystalType(types[GetIntRandom(3)]);
 		} else {
 			newCrystal.SetActive(true);
 
 			CrystalController crystalController = newCrystal.GetComponent<CrystalController> ();
-			crystalController.SetCrystalType(types[Random.Range(0, types.Length)]);
+			crystalController.SetCrystalType(types[GetIntRandom(3)]);
 			crystalController.Reset();
 		}
 
@@ -127,5 +127,10 @@ public class CrystalsSpawner : MonoBehaviour {
 
 		Rigidbody2D rigidBody = newCrystal.GetComponent<Rigidbody2D> ();
 		rigidBody.velocity = velocity;
+	}
+
+	private int GetIntRandom(int maxExclusive) {
+		float rnd = Random.Range(0f, (float) (maxExclusive - 1));
+		return (int) Mathf.Round(rnd);
 	}
 }
