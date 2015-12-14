@@ -4,12 +4,16 @@ using System.Collections;
 
 public class GameController : MonoBehaviour {
 
+	public Sprite lasersBlue;
+	public Sprite lasersRed;
+	public Sprite lasersGreen;
+
 	private Text _scoreText;
 	private long _score = 0;
 
 	private AudioSource _backgroundMusic;
 	private GameObject _sirene;
-	private Transform _secutiry;
+	private SpriteRenderer _lasersRenderer;
 
 	private LevelManager _levelManager;
 
@@ -23,7 +27,8 @@ public class GameController : MonoBehaviour {
 		_sirene = GameObject.FindGameObjectWithTag("Sirene");
 		DontDestroyOnLoad(_sirene);
 
-		_secutiry = transform.FindChild("Security");
+		_lasersRenderer = transform.FindChild("Lasers").GetComponent<SpriteRenderer> ();
+		_lasersRenderer.enabled = false;
 
 		Toolbox.Instance.currentScore = 0;
 	}
@@ -39,11 +44,21 @@ public class GameController : MonoBehaviour {
 		_sirene.GetComponent<AudioSource> ().Play();
 		_backgroundMusic.Stop();
 
-		foreach (LaserSecurity laserSecurity in _secutiry.GetComponentsInChildren<LaserSecurity> ()) {
-			laserSecurity.SetLaserColor(CrystalController.GetColor(type));
-			laserSecurity.SecurityEnable(true);
-		}
+		_lasersRenderer.sprite = GetLasersSprite(type);
+		_lasersRenderer.enabled = true;
 
 		_levelManager.LoadDeathWithDelay(5);
+	}
+
+	private Sprite GetLasersSprite(CrystalController.Type type) {
+		switch(type) {
+			case CrystalController.Type.BLUE:
+				return lasersBlue;
+			case CrystalController.Type.GREEN:
+				return lasersGreen;
+			case CrystalController.Type.RED:
+			default:
+				return lasersRed;
+		}
 	}
 }
