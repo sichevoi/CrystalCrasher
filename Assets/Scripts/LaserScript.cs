@@ -15,16 +15,20 @@ public class LaserScript : LaserBase {
 
 	private bool _setColor = false;
 
+	private GameController _gameController;
+
 	protected override void Start () {
 		base.Start();
 
 		SetLaserColor(redLaser);
 
 		_audio = GetComponent<AudioSource> ();
+
+		_gameController = FindObjectOfType<GameController> ();
 	}
 
 	void Update () {
-		if (Input.GetButtonDown("Fire1")) {
+		if (_gameController.IsGameOver() == false && Input.GetButtonDown("Fire1")) {
 			CheckColor();
 
 			if (_audio.isPlaying) {

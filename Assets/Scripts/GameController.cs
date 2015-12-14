@@ -19,6 +19,8 @@ public class GameController : MonoBehaviour {
 
 	private static int GAME_RESTART_TIMEOUT = 3;
 
+	private bool _gameOver = false;
+
 	void Start () {
 		_scoreText = FindObjectOfType<Text> ();
 		_scoreText.text = "0";
@@ -26,7 +28,10 @@ public class GameController : MonoBehaviour {
 		_levelManager = FindObjectOfType<LevelManager> ();
 
 		_backgroundMusic = GameObject.FindGameObjectWithTag("BackgroundMusic").GetComponent<AudioSource> ();
+
 		_sirene = GameObject.FindGameObjectWithTag("Sirene");
+		_sirene.GetComponent<AudioSource> ().Stop();
+
 		DontDestroyOnLoad(_sirene);
 
 		_lasersRenderer = transform.FindChild("Lasers").GetComponent<SpriteRenderer> ();
@@ -35,7 +40,16 @@ public class GameController : MonoBehaviour {
 		Toolbox.Instance.currentScore = 0;
 	}
 
+	public bool IsGameOver() {
+		return _gameOver;
+	}
+
 	public void IncrementScore() {
+
+		if (_gameOver) {
+			return;
+		}
+
 		_score += 1;
 		_scoreText.text = _score.ToString();
 
@@ -43,6 +57,8 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void OnPlayerDeath(CrystalController.Type type) {
+		_gameOver = true;
+
 		_sirene.GetComponent<AudioSource> ().Play();
 		_backgroundMusic.Stop();
 

@@ -19,10 +19,9 @@ public class CrystalsSpawner : MonoBehaviour {
 	private CrystalController.Type[] types = new CrystalController.Type[] { CrystalController.Type.RED, CrystalController.Type.BLUE, CrystalController.Type.GREEN };
 
 	private bool _isRunning = true;
-	private bool _gameOver = false;
 
 	private static int POOL_THRESHOLD = 20;
-	private static float POOL_PROBABILITY_BELOW_THRESHOLD = 0.2f;
+	private static float POOL_PROBABILITY_BELOW_THRESHOLD = 0.05f;
 	private IList<GameObject> objectsPool = new List<GameObject> ();
 
 	// Use this for initialization
@@ -36,7 +35,7 @@ public class CrystalsSpawner : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
 
-		if (_isRunning == false || _gameOver == true) {
+		if (_isRunning == false || _gameController.IsGameOver()) {
 			return;
 		}
 
@@ -67,7 +66,6 @@ public class CrystalsSpawner : MonoBehaviour {
 	}
 
 	public void OnMisHit(GameObject gameObject, CrystalController.Type type) {
-		_gameOver = true;
 		_gameController.OnPlayerDeath(type);
 	}
 

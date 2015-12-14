@@ -24,7 +24,7 @@ public class PlayerAtack : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetButtonDown("Jump")) {
+		if (_gameController.IsGameOver() == false && Input.GetButtonDown("Jump")) {
 			CrystalController.Type nextType = CrystalController.GetNext(_laser.GetGunType());
 			UpdateType(nextType);
 		}
