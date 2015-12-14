@@ -15,13 +15,13 @@ public class CrystalsSpawner : MonoBehaviour {
 	private Transform _originTransform;
 	private LevelManager _levelManager;
 
-	private GameObject _securityLaser;
 	private AudioSource _backgroundMusic;
 	private AudioSource _sirene;
 
 	private CrystalController.Type[] types = new CrystalController.Type[] { CrystalController.Type.RED, CrystalController.Type.BLUE, CrystalController.Type.GREEN };
 
 	private bool _isRunning = true;
+	private bool _gameOver = false;
 
 	private static int POOL_THRESHOLD = 20;
 	private static float POOL_PROBABILITY_BELOW_THRESHOLD = 0.2f;
@@ -33,8 +33,6 @@ public class CrystalsSpawner : MonoBehaviour {
 		_originTransform = GameObject.FindGameObjectWithTag("Respawn").transform;
 		_levelManager = FindObjectOfType<LevelManager> ();
 
-		_securityLaser = transform.FindChild("SecurityLaser").gameObject;
-		_securityLaser.SetActive(false);
 		_sirene = GetComponent<AudioSource> ();
 		_backgroundMusic = GameObject.FindGameObjectWithTag("BackgroundMusic").GetComponent<AudioSource> ();
 	}
@@ -42,7 +40,7 @@ public class CrystalsSpawner : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
 
-		if (_isRunning == false) {
+		if (_isRunning == false || _gameOver == true) {
 			return;
 		}
 
@@ -72,12 +70,11 @@ public class CrystalsSpawner : MonoBehaviour {
 		objectsPool.Add(crystal);
 	}
 
-	public void OnMisHit(GameObject gameObject) {
-		_securityLaser.transform.position = transform.position;
-		_securityLaser.SetActive(true);
+	public void OnMisHit(GameObject gameObject, CrystalController.Type type) {
 		_sirene.Play();
 		_backgroundMusic.Stop();
-		_levelManager.LoadDeathWithDelay(5);
+		_gameOver = true;
+		_levelManager.LoadDeathWithDelay(7);
 	}
 
 	private GameObject TryGetFromPool() {
